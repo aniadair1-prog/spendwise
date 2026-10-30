@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Report - SpendWise</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+<body>
+    <main class="container">
+        <h1>Monthly Spending Report</h1>
+        <p>{{ report_month }}</p>
+
+<form method="get" action="{{ url_for('report') }}">
+    <div class="form-row">
+        <label for="month">Choose a month:</label>
+       <input
+    id="month"
+    name="month"
+    type="month"
+    min="2020-01"
+    max="2035-12"
+    value="{{ selected_month }}"
+    required
+>
+    </div>
+
+    <button type="submit">View report</button>
+</form>
+
+        <div class="card">
+            <div class="card-label">Total expenses</div>
+            <div class="card-value expense">
+                £{{ "%.2f"|format(total_spent) }}
+            </div>
+        </div>
+
+        <h2>Spending by category</h2>
+
+        {% if spending %}
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Total spent</th>
+            </tr>
+
+            {% for item in spending %}
+            <tr>
+                <td>{{ item.category }}</td>
+                <td>£{{ "%.2f"|format(item.total_spent) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No expenses recorded for this month.</p>
+        {% endif %}
+
+        <p>
+            <a href="{{ url_for('home') }}">Back to dashboard</a>
+        </p>
+    </main>
+</body>
+</html>
